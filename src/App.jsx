@@ -45,12 +45,14 @@ function App() {
     const user_email = prompt('Your email?')
     if (!user_email) return
     const participants = parseInt(prompt('Number of participants?', '1') || '1', 10)
+    const experience_level = prompt('Experience level? (beginner/intermediate/advanced)', 'beginner')
+    if (!experience_level) return
 
     try {
       const res = await fetch(`${backend}/api/bookings`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ session_id: session.id, user_name, user_email, participants }),
+        body: JSON.stringify({ session_id: session.id, user_name, user_email, participants, experience_level }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.detail || 'Booking failed')
@@ -68,7 +70,10 @@ function App() {
           <div className="flex items-center gap-2">
             <span className="text-2xl font-bold text-sky-700">Surfbrew</span>
           </div>
-          <a className="text-sm text-sky-700 hover:underline" href="/test">System check</a>
+          <nav className="flex items-center gap-4">
+            <a className="text-sm text-sky-700 hover:underline" href="/test">System check</a>
+            <a className="text-sm text-sky-700 hover:underline" href="/admin">Admin</a>
+          </nav>
         </div>
       </header>
 
