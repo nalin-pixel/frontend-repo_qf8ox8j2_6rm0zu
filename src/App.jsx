@@ -1,8 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
 import Navbar from './components/Navbar'
-import Hero from './components/Hero'
+import ParallaxHero from './components/ParallaxHero'
 import Filters from './components/Filters'
 import PremiumCard from './components/PremiumCard'
+import HowItWorks from './components/HowItWorks'
+import SocialProof from './components/SocialProof'
+import FeaturedCoaches from './components/FeaturedCoaches'
+import MapSpots from './components/MapSpots'
+import MobileTabBar from './components/MobileTabBar'
+import Toaster from './components/Toaster'
 
 function App() {
   const [sessions, setSessions] = useState([])
@@ -59,21 +65,22 @@ function App() {
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.detail || 'Booking failed')
-      alert('Booking confirmed!')
+      window.dispatchEvent(new CustomEvent('toast', { detail: 'Booking confirmed! See you in the lineup.' }))
       fetchSessions()
     } catch (e) {
-      alert(e.message)
+      window.dispatchEvent(new CustomEvent('toast', { detail: e.message }))
     }
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-sky-50">
+    <div className="min-h-screen bg-gradient-to-b from-white to-sky-50/70">
       <Navbar />
-      <Hero />
+      <Toaster />
+      <ParallaxHero />
 
       <main id="browse" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <section className="mb-6">
-          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">Find your next surf session</h2>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">Find your next surf session</h2>
           <p className="text-slate-600">Filter by location, level and type. Book instantly.</p>
         </section>
 
@@ -93,6 +100,11 @@ function App() {
         )}
       </main>
 
+      <FeaturedCoaches />
+      <HowItWorks />
+      <SocialProof />
+      <MapSpots />
+
       <footer className="mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="rounded-3xl bg-gradient-to-br from-sky-600 to-cyan-600 text-white p-8 sm:p-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -106,6 +118,8 @@ function App() {
           <div className="text-center text-slate-500 text-sm mt-6">© {new Date().getFullYear()} Surfbrew — Ride smarter, book faster.</div>
         </div>
       </footer>
+
+      <MobileTabBar />
     </div>
   )
 }
