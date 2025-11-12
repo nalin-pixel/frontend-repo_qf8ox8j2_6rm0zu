@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
-import SessionCard from './components/SessionCard'
+import Navbar from './components/Navbar'
+import Hero from './components/Hero'
+import Filters from './components/Filters'
+import PremiumCard from './components/PremiumCard'
 
 function App() {
   const [sessions, setSessions] = useState([])
@@ -64,68 +67,43 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-50 to-white">
-      <header className="sticky top-0 z-10 bg-white/70 backdrop-blur border-b">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl font-bold text-sky-700">Surfbrew</span>
-          </div>
-          <nav className="flex items-center gap-4">
-            <a className="text-sm text-sky-700 hover:underline" href="/test">System check</a>
-            <a className="text-sm text-sky-700 hover:underline" href="/admin">Admin</a>
-          </nav>
-        </div>
-      </header>
+    <div className="min-h-screen bg-gradient-to-b from-white to-sky-50">
+      <Navbar />
+      <Hero />
 
-      <main className="max-w-6xl mx-auto px-4 py-8">
+      <main id="browse" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <section className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900">Find your next surf session</h1>
-          <p className="text-gray-600">Browse, filter and instantly book lessons with top coaches and schools.</p>
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900">Find your next surf session</h2>
+          <p className="text-slate-600">Filter by location, level and type. Book instantly.</p>
         </section>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="Search sessions, location or coach"
-            className="md:col-span-2 w-full border rounded-md px-3 py-2"
-          />
-          <input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="Location" className="w-full border rounded-md px-3 py-2" />
-          <div className="flex gap-2">
-            <select value={level} onChange={(e) => setLevel(e.target.value)} className="flex-1 border rounded-md px-3 py-2">
-              <option value="">Any level</option>
-              <option value="beginner">Beginner</option>
-              <option value="intermediate">Intermediate</option>
-              <option value="advanced">Advanced</option>
-              <option value="all">All</option>
-            </select>
-            <select value={type} onChange={(e) => setType(e.target.value)} className="flex-1 border rounded-md px-3 py-2">
-              <option value="">Any type</option>
-              <option value="group">Group</option>
-              <option value="private">Private</option>
-              <option value="recurring">Recurring</option>
-            </select>
-            <button onClick={fetchSessions} className="px-4 py-2 rounded-md bg-sky-600 text-white">Search</button>
-          </div>
-        </div>
+        <Filters q={q} setQ={setQ} location={location} setLocation={setLocation} level={level} setLevel={setLevel} type={type} setType={setType} onSearch={fetchSessions} />
 
-        {loading && <p className="text-gray-600">Loading sessions...</p>}
-        {error && <p className="text-rose-600">{error}</p>}
+        {loading && <p className="text-slate-600 mt-6">Loading sessions...</p>}
+        {error && <p className="text-rose-600 mt-6">{error}</p>}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {sessions.map((s) => (
-            <SessionCard key={s.id} session={s} onBook={onBook} />
+            <PremiumCard key={s.id} session={s} onBook={onBook} />
           ))}
         </div>
 
         {(!loading && sessions.length === 0) && (
-          <div className="text-center text-gray-600 py-12">No sessions found. Try adjusting filters.</div>
+          <div className="text-center text-slate-600 py-12">No sessions found. Try adjusting filters.</div>
         )}
       </main>
 
-      <footer className="border-t mt-10">
-        <div className="max-w-6xl mx-auto px-4 py-6 text-sm text-gray-500">
-          © {new Date().getFullYear()} Surfbrew — Ride smarter, book faster.
+      <footer className="mt-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+          <div className="rounded-3xl bg-gradient-to-br from-sky-600 to-cyan-600 text-white p-8 sm:p-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <h3 className="text-2xl font-extrabold">Ready to ride?</h3>
+              <p className="text-white/80">Lock in a lesson with a coach near you — premium gear, great vibes.</p>
+            </div>
+            <a href="#browse" className="inline-flex items-center rounded-xl bg-white text-sky-700 font-semibold px-5 py-3 shadow hover:bg-white/90">Book now</a>
+          </div>
+
+          <div className="text-center text-slate-500 text-sm mt-6">© {new Date().getFullYear()} Surfbrew — Ride smarter, book faster.</div>
         </div>
       </footer>
     </div>
